@@ -15,6 +15,9 @@
 #endif
 
 #include <cuda.h>
+#include <math_constants.h>
+#include <cuda/std/climits>
+#include <cuda/std/cassert>
 
 namespace boost
 {
@@ -38,10 +41,80 @@ namespace boost
 
       } // namespace detail
 
-      template <class T>
-      struct rounding_control_gpu {};
+      template<class T>
+      struct checking_base_gpu
+      {};
 
-      // XXX well actually, we never use this code anywhere
+      template<>
+      struct checking_base_gpu<float>
+      {
+        __device__ static float pos_inf()
+        {
+          return CUDART_INF_F;
+        }
+        __device__ static float neg_inf()
+        {
+          return -CUDART_INF_F;
+        }
+        __device__ static float nan()
+        {
+          return CUDART_NAN_F;
+        }
+        __device__ static bool is_nan(const float& x)
+        {
+          return (x != x);
+        }
+        __device__ static float empty_lower()
+        {
+          return nan();
+        }
+        __device__ static float empty_upper()
+        {
+          return nan();
+        }
+        __device__ static bool is_empty(const float& l, const float& u)
+        {
+          return !(l <= u);
+        }
+      };
+
+      template<>
+      struct checking_base_gpu<double>
+      {
+        __device__ static double pos_inf()
+        {
+          return CUDART_INF;
+        }
+        __device__ static double neg_inf()
+        {
+          return -CUDART_INF;
+        }
+        __device__ static double nan()
+        {
+          return CUDART_NAN;
+        }
+        __device__ static bool is_nan(const double& x)
+        {
+          return (x != x);
+        }
+        __device__ static double empty_lower()
+        {
+          return nan();
+        }
+        __device__ static double empty_upper()
+        {
+          return nan();
+        }
+        __device__ static bool is_empty(const double& l, const double& u)
+        {
+          return !(l <= u);
+        }
+      };
+
+      template <class T>
+      struct rounding_control_gpu: detail::cuda_rounding_control
+      {};
+
       template <>
       struct rounding_control_gpu<float>: detail::cuda_rounding_control
       {
@@ -150,27 +223,28 @@ namespace boost
 
       // TODO rounded_transc
 
-      // template <class T>
-      // struct rounded_math_gpu : save_state_nothing<rounded_arith_exact<T>>
-      // {
-      // };
+      template <class T>
+      struct rounded_math_gpu : save_state_nothing<rounded_arith_exact<T> >
+      {};
 
-      // template <>
-      // struct rounded_math_gpu<float> : save_state_nothing<rounded_arith_gpu<float>>
-      // {
-      // };
+      template <>
+      struct rounded_math_gpu<float> : save_state_nothing<rounded_arith_gpu<float> >
+      {};
 
-      // template <>
-      // struct rounded_math_gpu<double> : save_state_nothing<rounded_arith_gpu<double>>
-      // {
-      // };
+      template <>
+      struct rounded_math_gpu<double> : save_state_nothing<rounded_arith_gpu<double> >
+      {};
 
-      // template<class T>
-      // struct default_policies_gpu
-      // {
-      //   typedef policies<rounded_math_gpu<T>, checking_strict<T> > type;
-      // };
+      template<class T>
+      struct default_policies_gpu
+      {
+        typedef policies<rounded_math_gpu<T>, checking_base_gpu<T> > type;
+      };
     } // namespace interval_lib
+
+    // template<class T, class Policies = typename interval_lib::default_policies_gpu<T>::type >
+    // class __device__ gpu_interval: interval<T, Policies> {};
+
   }   // namespace numeric
 } // namespace boost
 

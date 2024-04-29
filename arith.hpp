@@ -171,8 +171,14 @@ template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator*(const interval<T, Policies>& x,
                                 const interval<T, Policies>& y)
 {
+  #ifndef __NVCC__
   BOOST_USING_STD_MIN();
   BOOST_USING_STD_MAX();
+  #else
+  BOOST_USING_GPU_MIN();
+  BOOST_USING_GPU_MAX();
+  #endif
+  using gpu::min;
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();

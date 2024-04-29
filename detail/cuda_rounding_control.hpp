@@ -243,6 +243,45 @@ namespace boost
         typedef policies<rounded_math_gpu<T>, checking_base_gpu<T> > type;
       };
     } // namespace interval_lib
+    
+    namespace gpu
+    {
+      template <class T>
+      __device__ T min(const T &a, const T &b) {};
+      template <class T>
+      __device__ T max(const T &a, const T &b) {};
+
+      template <>
+      __device__ float min(const float &a, const float &b)
+      {
+        return fminf(a, b);
+      }
+      template <>
+      __device__ float max(const float &a, const float &b)
+      {
+        return fmaxf(a, b);
+      }
+
+      template <>
+      __device__ double min(const double &a, const double &b)
+      {
+        return fmin(a, b);
+      }
+      template <>
+      __device__ double max(const double &a, const double &b)
+      {
+        return fmax(a, b);
+      }
+    } // namespace gpu
+
+    #ifndef BOOST_USING_GPU_MIN
+    #  define BOOST_USING_GPU_MIN() using gpu::min
+    #endif
+
+    #ifndef BOOST_USING_GPU_MAX
+    #  define BOOST_USING_GPU_MAX() using gpu::max
+    #endif
+
   } // namespace numeric
 } // namespace boost
 

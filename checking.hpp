@@ -38,36 +38,44 @@ struct exception_invalid_number
 template<class T>
 struct checking_base
 {
-  static T pos_inf()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T pos_inf()
   {
     assert(std::numeric_limits<T>::has_infinity);
     return std::numeric_limits<T>::infinity();
   }
-  static T neg_inf()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T neg_inf()
   {
     assert(std::numeric_limits<T>::has_infinity);
     return -std::numeric_limits<T>::infinity();
   }
-  static T nan()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T nan()
   {
     assert(std::numeric_limits<T>::has_quiet_NaN);
     return std::numeric_limits<T>::quiet_NaN();
   }
-  static bool is_nan(const T& x)
+  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_nan(const T& x)
   {
     return std::numeric_limits<T>::has_quiet_NaN && (x != x);
   }
-  static T empty_lower()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_lower()
   {
+    #ifndef __NVCC__
     return (std::numeric_limits<T>::has_quiet_NaN ?
             std::numeric_limits<T>::quiet_NaN() : static_cast<T>(1));
+    #else
+    return checking_base_gpu<T>::empty_lower();
+    #endif
   }
-  static T empty_upper()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_upper()
   {
+    #ifndef __NVCC__
     return (std::numeric_limits<T>::has_quiet_NaN ?
             std::numeric_limits<T>::quiet_NaN() : static_cast<T>(0));
+    #else
+    return checking_base_gpu<T>::empty_upper();
+    #endif
   }
-  static bool is_empty(const T& l, const T& u)
+  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_empty(const T& l, const T& u)
   {
     return !(l <= u); // safety for partial orders
   }
@@ -77,22 +85,30 @@ template<class T, class Checking = checking_base<T>,
          class Exception = exception_create_empty>
 struct checking_no_empty: Checking
 {
-  static T nan()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T nan()
   {
     assert(false);
     return Checking::nan();
   }
-  static T empty_lower()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_lower()
   {
+    #ifndef __NVCC__
     Exception()();
     return Checking::empty_lower();
+    #else
+    return checking_base_gpu<T>::empty_lower();
+    #endif
   }
-  static T empty_upper()
+  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_upper()
   {
+    #ifndef __NVCC__
     Exception()();
     return Checking::empty_upper();
+    #else
+    return checking_base_gpu<T>::empty_upper();
+    #endif
   }
-  static bool is_empty(const T&, const T&)
+  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_empty(const T&, const T&)
   {
     return false;
   }
@@ -101,7 +117,7 @@ struct checking_no_empty: Checking
 template<class T, class Checking = checking_base<T> >
 struct checking_no_nan: Checking
 {
-  static bool is_nan(const T&)
+  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_nan(const T&)
   {
     return false;
   }
@@ -111,7 +127,7 @@ template<class T, class Checking = checking_base<T>,
          class Exception = exception_invalid_number>
 struct checking_catch_nan: Checking
 {
-  static bool is_nan(const T& x)
+  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_nan(const T& x)
   {
     if (Checking::is_nan(x)) Exception()();
     return false;

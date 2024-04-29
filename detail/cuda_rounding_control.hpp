@@ -150,26 +150,26 @@ namespace boost
 
       // TODO rounded_transc
 
-      template <class T>
-      struct rounded_math_gpu : save_state_nothing<rounded_arith_exact<T>>
-      {
-      };
+      // template <class T>
+      // struct rounded_math_gpu : save_state_nothing<rounded_arith_exact<T>>
+      // {
+      // };
 
-      template <>
-      struct rounded_math_gpu<float> : save_state_nothing<rounded_arith_gpu<float>>
-      {
-      };
+      // template <>
+      // struct rounded_math_gpu<float> : save_state_nothing<rounded_arith_gpu<float>>
+      // {
+      // };
 
-      template <>
-      struct rounded_math_gpu<double> : save_state_nothing<rounded_arith_gpu<double>>
-      {
-      };
+      // template <>
+      // struct rounded_math_gpu<double> : save_state_nothing<rounded_arith_gpu<double>>
+      // {
+      // };
 
-      template<class T>
-      struct default_policies_gpu
-      {
-        typedef policies<rounded_math_gpu<T>, checking_strict<T> > type;
-      };
+      // template<class T>
+      // struct default_policies_gpu
+      // {
+      //   typedef policies<rounded_math_gpu<T>, checking_strict<T> > type;
+      // };
     } // namespace interval_lib
   }   // namespace numeric
 } // namespace boost

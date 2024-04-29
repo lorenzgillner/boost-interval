@@ -25,22 +25,7 @@ namespace boost
   {
     namespace interval_lib
     {
-      namespace detail
-      {
-        // arithmetic functions in CUDA are stateless, so this shouldn't do anything
-        struct cuda_rounding_control
-        {
-          typedef unsigned int rounding_mode;
-          __device__ void set_rounding_mode(rounding_mode &) {}
-          __device__ void get_rounding_mode(rounding_mode) {}
-          __device__ void downward() {}
-          __device__ void upward() {}
-          __device__ void to_nearest() {}
-          __device__ void toward_zero() {}
-        };
-
-      } // namespace detail
-
+      /** GPU checking */
       template<class T>
       struct checking_base_gpu
       {};
@@ -110,6 +95,23 @@ namespace boost
           return !(l <= u);
         }
       };
+
+      /** GPU rounding control */
+      namespace detail
+      {
+        // arithmetic functions in CUDA are stateless, so this shouldn't do anything
+        struct cuda_rounding_control
+        {
+          typedef unsigned int rounding_mode;
+          __device__ void set_rounding_mode(rounding_mode &) {}
+          __device__ void get_rounding_mode(rounding_mode) {}
+          __device__ void downward() {}
+          __device__ void upward() {}
+          __device__ void to_nearest() {}
+          __device__ void toward_zero() {}
+        };
+
+      } // namespace detail
 
       template <class T>
       struct rounding_control_gpu: detail::cuda_rounding_control
@@ -224,15 +226,15 @@ namespace boost
       // TODO rounded_transc
 
       template <class T>
-      struct rounded_math_gpu : save_state_nothing<rounded_arith_exact<T> >
+      struct rounded_math_gpu: save_state_nothing<rounded_arith_exact<T> >
       {};
 
       template <>
-      struct rounded_math_gpu<float> : save_state_nothing<rounded_arith_gpu<float> >
+      struct rounded_math_gpu<float>: save_state_nothing<rounded_arith_gpu<float> >
       {};
 
       template <>
-      struct rounded_math_gpu<double> : save_state_nothing<rounded_arith_gpu<double> >
+      struct rounded_math_gpu<double>: save_state_nothing<rounded_arith_gpu<double> >
       {};
 
       template<class T>
@@ -241,11 +243,7 @@ namespace boost
         typedef policies<rounded_math_gpu<T>, checking_base_gpu<T> > type;
       };
     } // namespace interval_lib
-
-    // template<class T, class Policies = typename interval_lib::default_policies_gpu<T>::type >
-    // class __device__ gpu_interval: interval<T, Policies> {};
-
-  }   // namespace numeric
+  } // namespace numeric
 } // namespace boost
 
 #endif /* BOOST_NUMERIC_INTERVAL_DETAIL_CUDA_ROUNDING_CONTROL_HPP */

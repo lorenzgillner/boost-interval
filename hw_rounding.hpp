@@ -36,9 +36,6 @@
 
 #if defined(__NVCC__) || defined(__CUDACC__)
 #  include <boost/numeric/interval/detail/cuda_rounding_control.hpp>
-#  define BOOST_NUMERIC_INTERVAL_PORTABLE __host__ __device__
-#else
-#  define BOOST_NUMERIC_INTERVAL_PORTABLE
 #endif
 
 #if defined(BOOST_NUMERIC_INTERVAL_NO_HARDWARE) && !defined(BOOST_NO_FENV_H)

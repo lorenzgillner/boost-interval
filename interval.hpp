@@ -108,7 +108,7 @@ public:
 private:
   struct interval_holder {
     template<class Policies2>
-    interval_holder(const interval<T, Policies2>& r)
+    BOOST_NUMERIC_INTERVAL_PORTABLE interval_holder(const interval<T, Policies2>& r)
       : low(r.lower()), up(r.upper())
     {
       typedef typename Policies2::checking checking2;
@@ -121,7 +121,7 @@ private:
   };
 
   struct number_holder {
-    number_holder(const T& r) : val(r)
+    BOOST_NUMERIC_INTERVAL_PORTABLE number_holder(const T& r) : val(r)
     {
       typedef typename Policies::checking checking;
       if (checking::is_nan(r))
@@ -138,18 +138,18 @@ private:
   T up;
 };
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval():
   low(static_cast<T>(0)), up(static_cast<T>(0))
 {}
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(T const &v): low(v), up(v)
 {
   if (checking::is_nan(v)) set_empty();
 }
 
-template<class T, class Policies> template<class T1> inline
+template<class T, class Policies> template<class T1>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(T1 const &v)
 {
   if (checking::is_nan(v)) set_empty();
@@ -160,7 +160,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(T1 const &v)
   }
 }
 
-template<class T, class Policies> template<class T1, class T2> inline
+template<class T, class Policies> template<class T1, class T2>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(T1 const &l, T2 const &u)
 {
   if (checking::is_nan(l) || checking::is_nan(u) || !(l <= u)) set_empty();
@@ -171,7 +171,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(T1 const &l, T2 
   }
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(T const &l, T const &u): low(l), up(u)
 {
   if (checking::is_nan(l) || checking::is_nan(u) || !(l <= u))
@@ -179,18 +179,18 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(T const &l, T co
 }
 
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(interval<T, Policies> const &r): low(r.lower()), up(r.upper())
 {}
 
-template<class T, class Policies> template<class Policies1> inline
+template<class T, class Policies> template<class Policies1>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(interval<T, Policies1> const &r): low(r.lower()), up(r.upper())
 {
   typedef typename Policies1::checking checking1;
   if (checking1::is_empty(r.lower(), r.upper())) set_empty();
 }
 
-template<class T, class Policies> template<class T1, class Policies1> inline
+template<class T, class Policies> template<class T1, class Policies1>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(interval<T1, Policies1> const &r)
 {
   typedef typename Policies1::checking checking1;
@@ -202,7 +202,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>::interval(interval<T1, Pol
   }
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::operator=(T const &v)
 {
   if (checking::is_nan(v)) set_empty();
@@ -210,7 +210,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies> template<class T1> inline
+template<class T, class Policies> template<class T1>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::operator=(T1 const &v)
 {
   if (checking::is_nan(v)) set_empty();
@@ -222,7 +222,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::operator=(interval<T, Policies> const &r)
 {
   low = r.lower();
@@ -230,7 +230,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies> template<class Policies1> inline
+template<class T, class Policies> template<class Policies1>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::operator=(interval<T, Policies1> const &r)
 {
   typedef typename Policies1::checking checking1;
@@ -242,7 +242,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies> template<class T1, class Policies1> inline
+template<class T, class Policies> template<class T1, class Policies1>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::operator=(interval<T1, Policies1> const &r)
 {
   typedef typename Policies1::checking checking1;
@@ -255,7 +255,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> &interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE void interval<T, Policies>::assign(const T& l, const T& u)
 {
   if (checking::is_nan(l) || checking::is_nan(u) || !(l <= u))
@@ -263,28 +263,28 @@ BOOST_NUMERIC_INTERVAL_PORTABLE void interval<T, Policies>::assign(const T& l, c
   else set(l, u);
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE void interval<T, Policies>::set(const T& l, const T& u)
 {
   low = l;
   up  = u;
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE void interval<T, Policies>::set_empty()
 {
   low = checking::empty_lower();
   up  = checking::empty_upper();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE void interval<T, Policies>::set_whole()
 {
   low = checking::neg_inf();
   up  = checking::pos_inf();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> interval<T, Policies>::hull(const T& x, const T& y)
 {
   bool bad_x = checking::is_nan(x);
@@ -298,26 +298,26 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> interval<T, Policies>::hul
   else        return interval(y, x, true);
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> interval<T, Policies>::empty()
 {
   return interval<T, Policies>(checking::empty_lower(),
                                checking::empty_upper(), true);
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> interval<T, Policies>::whole()
 {
   return interval<T, Policies>(checking::neg_inf(), checking::pos_inf(), true);
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE const T& interval<T, Policies>::lower() const
 {
   return low;
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE const T& interval<T, Policies>::upper() const
 {
   return up;
@@ -327,7 +327,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE const T& interval<T, Policies>::upper() const
  * interval/interval comparisons
  */
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator< (const interval_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -337,7 +337,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator< (const int
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator> (const interval_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -347,7 +347,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator> (const int
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator<= (const interval_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -357,7 +357,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator<= (const in
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator>= (const interval_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -367,7 +367,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator>= (const in
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator== (const interval_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -377,7 +377,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator== (const in
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator!= (const interval_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -391,7 +391,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator!= (const in
  * interval/number comparisons
  */
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator< (const number_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -401,7 +401,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator< (const num
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator> (const number_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -411,7 +411,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator> (const num
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator<= (const number_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -421,7 +421,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator<= (const nu
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator>= (const number_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -431,7 +431,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator>= (const nu
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator== (const number_holder& r) const
 {
   if (!checking::is_empty(low, up)) {
@@ -441,7 +441,7 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator== (const nu
   throw interval_lib::comparison_error();
 }
 
-template<class T, class Policies> inline
+template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE bool interval<T, Policies>::operator!= (const number_holder& r) const
 {
   if (!checking::is_empty(low, up)) {

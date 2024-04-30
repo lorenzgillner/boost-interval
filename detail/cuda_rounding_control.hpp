@@ -251,46 +251,145 @@ namespace boost
     
     namespace gpu
     {
-      template <class T>
-      __device__ T min(const T &a, const T &b) {};
-      template <class T>
-      __device__ T max(const T &a, const T &b) {};
+      template <class T> __device__ T min(const T &a, const T &b) {};
+      template <class T> __device__ T max(const T &a, const T &b) {};
+      template <class T> __device__ T floor(const T &a) {};
+      template <class T> __device__ T ceil(const T &a) {};
+      template <class T> __device__ T exp(const T &a) {};
+      template <class T> __device__ T log(const T &a) {};
+      template <class T> __device__ T sin(const T &a) {};
+      template <class T> __device__ T cos(const T &a) {};
+      template <class T> __device__ T tan(const T &a) {};
+      template <class T> __device__ T asin(const T &a) {};
+      template <class T> __device__ T acos(const T &a) {};
+      template <class T> __device__ T atan(const T &a) {};
+      template <class T> __device__ T sinh(const T &a) {};
+      template <class T> __device__ T cosh(const T &a) {};
+      template <class T> __device__ T tanh(const T &a) {};
+      template <class T> __device__ T sqrt(const T &a) {};
 
-      template <>
-      __device__ float min(const float &a, const float &b)
+      template <> __device__ float min(const float &a, const float &b)
       {
         return fminf(a, b);
       }
-      template <>
-      __device__ float max(const float &a, const float &b)
+      template <> __device__ float max(const float &a, const float &b)
       {
         return fmaxf(a, b);
       }
+      template <> __device__ float floor(const float &a)
+      {
+        return floorf(a);
+      }
+      template <> __device__ float ceil(const float &a)
+      {
+        return ceilf(a);
+      }
+      template <> __device__ float sin(const float &a)
+      {
+        return sinf(a);
+      }
+      template <> __device__ float cos(const float &a)
+      {
+        return cosf(a);
+      }
+      template <> __device__ float tan(const float &a)
+      {
+        return tanf(a);
+      }
+      template <> __device__ float asin(const float &a)
+      {
+        return asinf(a);
+      }
+      template <> __device__ float acos(const float &a)
+      {
+        return acosf(a);
+      }
+      template <> __device__ float atan(const float &a)
+      {
+        return atanf(a);
+      }
+      template <> __device__ float sinh(const float &a)
+      {
+        return sinhf(a);
+      }
+      template <> __device__ float cosh(const float &a)
+      {
+        return coshf(a);
+      }
+      template <> __device__ float tanh(const float &a)
+      {
+        return tanhf(a);
+      }
+      template <> __device__ float sqrt(const float &a)
+      {
+        return sqrtf(a);
+      }
 
-      template <>
-      __device__ double min(const double &a, const double &b)
+      template <> __device__ double min(const double &a, const double &b)
       {
         return fmin(a, b);
       }
-      template <>
-      __device__ double max(const double &a, const double &b)
+      template <> __device__ double max(const double &a, const double &b)
       {
         return fmax(a, b);
       }
+      template <> __device__ double floor(const double &a)
+      {
+        return floor(a);
+      }
+      template <> __device__ double ceil(const double &a)
+      {
+        return ceil(a);
+      }
+      template <> __device__ double sin(const double &a)
+      {
+        return sin(a);
+      }
+      template <> __device__ double cos(const double &a)
+      {
+        return cos(a);
+      }
+      template <> __device__ double tan(const double &a)
+      {
+        return tan(a);
+      }
+      template <> __device__ double asin(const double &a)
+      {
+        return asin(a);
+      }
+      template <> __device__ double acos(const double &a)
+      {
+        return acos(a);
+      }
+      template <> __device__ double atan(const double &a)
+      {
+        return atan(a);
+      }
+      template <> __device__ double sinh(const double &a)
+      {
+        return sinh(a);
+      }
+      template <> __device__ double cosh(const double &a)
+      {
+        return cosh(a);
+      }
+      template <> __device__ double tanh(const double &a)
+      {
+        return tanh(a);
+      }
+      template <> __device__ double sqrt(const double &a)
+      {
+        return sqrt(a);
+      }
     } // namespace gpu
 
-    // #ifndef BOOST_USING_GPU_MIN
-    // #  define BOOST_USING_GPU_MIN() using gpu::min
-    // #endif
-
-    // #ifndef BOOST_USING_GPU_MAX
-    // #  define BOOST_USING_GPU_MAX() using gpu::max
-    // #endif
-
+    // XXX this is very hacky!
     #undef BOOST_USING_STD_MIN
     #define BOOST_USING_STD_MIN() using gpu::min
     #undef BOOST_USING_STD_MAX
     #define BOOST_USING_STD_MAX() using gpu::max
+    #undef BOOST_NUMERIC_INTERVAL_using_math
+    #define BOOST_NUMERIC_INTERVAL_using_math(a) using gpu::a
 
   } // namespace numeric
 } // namespace boost

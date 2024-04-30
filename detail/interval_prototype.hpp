@@ -10,12 +10,6 @@
 #ifndef BOOST_NUMERIC_INTERVAL_DETAIL_INTERVAL_PROTOTYPE_HPP
 #define BOOST_NUMERIC_INTERVAL_DETAIL_INTERVAL_PROTOTYPE_HPP
 
-#if defined(__NVCC__) || defined(__CUDACC__)
-#  define BOOST_NUMERIC_INTERVAL_PORTABLE __host__ __device__
-#else
-#  define BOOST_NUMERIC_INTERVAL_PORTABLE
-#endif
-
 namespace boost {
 namespace numeric {
 

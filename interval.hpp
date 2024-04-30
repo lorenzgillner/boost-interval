@@ -14,6 +14,13 @@
 #include <string>
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 
+#if defined(__NVCC__) || defined(__CUDACC__)
+#  define BOOST_NUMERIC_INTERVAL_PORTABLE __host__ __device__
+#  define BOOST_NUMERIC_INTERVAL_GPU
+#else
+#  define BOOST_NUMERIC_INTERVAL_PORTABLE
+#endif
+
 namespace boost {
 namespace numeric {
 

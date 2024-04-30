@@ -171,7 +171,7 @@ template<class T, class Policies>
 BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator*(const interval<T, Policies>& x,
                                 const interval<T, Policies>& y)
 {
-  #ifndef __NVCC__
+  #ifndef BOOST_NUMERIC_INTERVAL_GPU
   BOOST_USING_STD_MIN();
   BOOST_USING_STD_MAX();
   #else

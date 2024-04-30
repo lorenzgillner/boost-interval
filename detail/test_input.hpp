@@ -18,26 +18,26 @@ namespace interval_lib {
 namespace user {
 
 template<class T>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool is_zero(T const &v) { return v == static_cast<T>(0); }
+BOOST_GPU_ENABLED bool is_zero(T const &v) { return v == static_cast<T>(0); }
 
 template<class T>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool is_neg (T const &v) { return v <  static_cast<T>(0); }
+BOOST_GPU_ENABLED bool is_neg (T const &v) { return v <  static_cast<T>(0); }
 
 template<class T>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool is_pos (T const &v) { return v >  static_cast<T>(0); }
+BOOST_GPU_ENABLED bool is_pos (T const &v) { return v >  static_cast<T>(0); }
 
 } // namespace user
 
 namespace detail {
 
 template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool test_input(const interval<T, Policies>& x) {
+BOOST_GPU_ENABLED bool test_input(const interval<T, Policies>& x) {
   typedef typename Policies::checking checking;
   return checking::is_empty(x.lower(), x.upper());
 }
 
 template<class T, class Policies1, class Policies2>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool test_input(const interval<T, Policies1>& x, const interval<T, Policies2>& y) {
+BOOST_GPU_ENABLED bool test_input(const interval<T, Policies1>& x, const interval<T, Policies2>& y) {
   typedef typename Policies1::checking checking1;
   typedef typename Policies2::checking checking2;
   return checking1::is_empty(x.lower(), x.upper()) ||
@@ -45,25 +45,25 @@ BOOST_NUMERIC_INTERVAL_PORTABLE bool test_input(const interval<T, Policies1>& x,
 }
 
 template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool test_input(const T& x, const interval<T, Policies>& y) {
+BOOST_GPU_ENABLED bool test_input(const T& x, const interval<T, Policies>& y) {
   typedef typename Policies::checking checking;
   return checking::is_nan(x) || checking::is_empty(y.lower(), y.upper());
 }
 
 template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool test_input(const interval<T, Policies>& x, const T& y) {
+BOOST_GPU_ENABLED bool test_input(const interval<T, Policies>& x, const T& y) {
   typedef typename Policies::checking checking;
   return checking::is_empty(x.lower(), x.upper()) || checking::is_nan(y);
 }
 
 template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool test_input(const T& x) {
+BOOST_GPU_ENABLED bool test_input(const T& x) {
   typedef typename Policies::checking checking;
   return checking::is_nan(x);
 }
 
 template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE bool test_input(const T& x, const T& y) {
+BOOST_GPU_ENABLED bool test_input(const T& x, const T& y) {
   typedef typename Policies::checking checking;
   return checking::is_nan(x) || checking::is_nan(y);
 }

@@ -25,22 +25,22 @@ namespace numeric {
  * Basic arithmetic operators
  */
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE const interval<T, Policies>& operator+(const interval<T, Policies>& x)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED const interval<T, Policies>& operator+(const interval<T, Policies>& x)
 {
   return x;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator-(const interval<T, Policies>& x)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator-(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x))
     return interval<T, Policies>::empty();
   return interval<T, Policies>(-x.upper(), -x.lower(), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator+=(const interval<T, Policies>& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator+=(const interval<T, Policies>& r)
 {
   if (interval_lib::detail::test_input(*this, r))
     set_empty();
@@ -51,8 +51,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator+=(const T& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator+=(const T& r)
 {
   if (interval_lib::detail::test_input(*this, r))
     set_empty();
@@ -63,8 +63,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator-=(const interval<T, Policies>& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator-=(const interval<T, Policies>& r)
 {
   if (interval_lib::detail::test_input(*this, r))
     set_empty();
@@ -75,8 +75,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator-=(const T& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator-=(const T& r)
 {
   if (interval_lib::detail::test_input(*this, r))
     set_empty();
@@ -87,32 +87,32 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::op
   return *this;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator*=(const interval<T, Policies>& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator*=(const interval<T, Policies>& r)
 {
   return *this = *this * r;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator*=(const T& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator*=(const T& r)
 {
   return *this = r * *this;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator/=(const interval<T, Policies>& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator/=(const interval<T, Policies>& r)
 {
   return *this = *this / r;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies>& interval<T, Policies>::operator/=(const T& r)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator/=(const T& r)
 {
   return *this = *this / r;
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator+(const interval<T, Policies>& x,
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator+(const interval<T, Policies>& x,
                                                                 const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
@@ -122,8 +122,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator+(const interval<T
                               rnd.add_up  (x.upper(), y.upper()), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator+(const T& x, const interval<T, Policies>& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator+(const T& x, const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
     return interval<T, Policies>::empty();
@@ -132,12 +132,12 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator+(const T& x, cons
                               rnd.add_up  (x, y.upper()), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator+(const interval<T, Policies>& x, const T& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator+(const interval<T, Policies>& x, const T& y)
 { return y + x; }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator-(const interval<T, Policies>& x,
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator-(const interval<T, Policies>& x,
                                 const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
@@ -147,8 +147,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator-(const interval<T
                               rnd.sub_up  (x.upper(), y.lower()), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator-(const T& x, const interval<T, Policies>& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator-(const T& x, const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
     return interval<T, Policies>::empty();
@@ -157,8 +157,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator-(const T& x, cons
                               rnd.sub_up  (x, y.lower()), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator-(const interval<T, Policies>& x, const T& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator-(const interval<T, Policies>& x, const T& y)
 {
   if (interval_lib::detail::test_input(x, y))
     return interval<T, Policies>::empty();
@@ -167,18 +167,12 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator-(const interval<T
                               rnd.sub_up  (x.upper(), y), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator*(const interval<T, Policies>& x,
-                                const interval<T, Policies>& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator*(const interval<T, Policies>& x,
+                                                  const interval<T, Policies>& y)
 {
-  #ifndef BOOST_NUMERIC_INTERVAL_GPU
   BOOST_USING_STD_MIN();
   BOOST_USING_STD_MAX();
-  #else
-  BOOST_USING_GPU_MIN();
-  BOOST_USING_GPU_MAX();
-  #endif
-  using gpu::min;
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
     return I::empty();
@@ -228,8 +222,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator*(const interval<T
       return I(static_cast<T>(0), static_cast<T>(0), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator*(const T& x, const interval<T, Policies>& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator*(const T& x, const interval<T, Policies>& y)
 { 
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
@@ -246,12 +240,12 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator*(const T& x, cons
     return I(rnd.mul_down(x, yl), rnd.mul_up(x, yu), true);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator*(const interval<T, Policies>& x, const T& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator*(const interval<T, Policies>& x, const T& y)
 { return y * x; }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator/(const interval<T, Policies>& x,
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator/(const interval<T, Policies>& x,
                                 const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
@@ -271,8 +265,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator/(const interval<T
     return interval_lib::detail::div_non_zero(x, y);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator/(const T& x, const interval<T, Policies>& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator/(const T& x, const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
     return interval<T, Policies>::empty();
@@ -291,8 +285,8 @@ BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator/(const T& x, cons
     return interval_lib::detail::div_non_zero(x, y);
 }
 
-template<class T, class Policies>
-BOOST_NUMERIC_INTERVAL_PORTABLE interval<T, Policies> operator/(const interval<T, Policies>& x, const T& y)
+template<class T, class Policies> inline
+BOOST_GPU_ENABLED interval<T, Policies> operator/(const interval<T, Policies>& x, const T& y)
 {
   if (interval_lib::detail::test_input(x, y) || interval_lib::user::is_zero(y))
     return interval<T, Policies>::empty();

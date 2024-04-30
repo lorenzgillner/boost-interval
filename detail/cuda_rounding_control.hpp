@@ -14,10 +14,15 @@
 #error Boost.Numeric.Interval: This header is intended for CUDA GPUs only.
 #endif
 
+#ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
+#define BOOST_NUMERIC_INTERVAL_USE_GPU
+#endif
+
 #include <cuda.h>
 #include <math_constants.h>
 #include <cuda/std/climits>
 #include <cuda/std/cassert>
+#include <cuda/std/utility>
 
 namespace boost
 {
@@ -274,13 +279,18 @@ namespace boost
       }
     } // namespace gpu
 
-    #ifndef BOOST_USING_GPU_MIN
-    #  define BOOST_USING_GPU_MIN() using gpu::min
-    #endif
+    // #ifndef BOOST_USING_GPU_MIN
+    // #  define BOOST_USING_GPU_MIN() using gpu::min
+    // #endif
 
-    #ifndef BOOST_USING_GPU_MAX
-    #  define BOOST_USING_GPU_MAX() using gpu::max
-    #endif
+    // #ifndef BOOST_USING_GPU_MAX
+    // #  define BOOST_USING_GPU_MAX() using gpu::max
+    // #endif
+
+    #undef BOOST_USING_STD_MIN
+    #define BOOST_USING_STD_MIN() using gpu::min
+    #undef BOOST_USING_STD_MAX
+    #define BOOST_USING_STD_MAX() using gpu::max
 
   } // namespace numeric
 } // namespace boost

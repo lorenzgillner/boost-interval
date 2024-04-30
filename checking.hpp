@@ -38,26 +38,26 @@ struct exception_invalid_number
 template<class T>
 struct checking_base
 {
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T pos_inf()
+  BOOST_GPU_ENABLED static T pos_inf()
   {
     assert(std::numeric_limits<T>::has_infinity);
     return std::numeric_limits<T>::infinity();
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T neg_inf()
+  BOOST_GPU_ENABLED static T neg_inf()
   {
     assert(std::numeric_limits<T>::has_infinity);
     return -std::numeric_limits<T>::infinity();
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T nan()
+  BOOST_GPU_ENABLED static T nan()
   {
     assert(std::numeric_limits<T>::has_quiet_NaN);
     return std::numeric_limits<T>::quiet_NaN();
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_nan(const T& x)
+  BOOST_GPU_ENABLED static bool is_nan(const T& x)
   {
     return std::numeric_limits<T>::has_quiet_NaN && (x != x);
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_lower()
+  BOOST_GPU_ENABLED static T empty_lower()
   {
     #ifndef __NVCC__
     return (std::numeric_limits<T>::has_quiet_NaN ?
@@ -66,7 +66,7 @@ struct checking_base
     return checking_base_gpu<T>::empty_lower();
     #endif
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_upper()
+  BOOST_GPU_ENABLED static T empty_upper()
   {
     #ifndef __NVCC__
     return (std::numeric_limits<T>::has_quiet_NaN ?
@@ -75,7 +75,7 @@ struct checking_base
     return checking_base_gpu<T>::empty_upper();
     #endif
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_empty(const T& l, const T& u)
+  BOOST_GPU_ENABLED static bool is_empty(const T& l, const T& u)
   {
     return !(l <= u); // safety for partial orders
   }
@@ -85,12 +85,12 @@ template<class T, class Checking = checking_base<T>,
          class Exception = exception_create_empty>
 struct checking_no_empty: Checking
 {
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T nan()
+  BOOST_GPU_ENABLED static T nan()
   {
     assert(false);
     return Checking::nan();
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_lower()
+  BOOST_GPU_ENABLED static T empty_lower()
   {
     #ifndef __NVCC__
     Exception()();
@@ -99,7 +99,7 @@ struct checking_no_empty: Checking
     return checking_base_gpu<T>::empty_lower();
     #endif
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static T empty_upper()
+  BOOST_GPU_ENABLED static T empty_upper()
   {
     #ifndef __NVCC__
     Exception()();
@@ -108,7 +108,7 @@ struct checking_no_empty: Checking
     return checking_base_gpu<T>::empty_upper();
     #endif
   }
-  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_empty(const T&, const T&)
+  BOOST_GPU_ENABLED static bool is_empty(const T&, const T&)
   {
     return false;
   }
@@ -117,7 +117,7 @@ struct checking_no_empty: Checking
 template<class T, class Checking = checking_base<T> >
 struct checking_no_nan: Checking
 {
-  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_nan(const T&)
+  BOOST_GPU_ENABLED static bool is_nan(const T&)
   {
     return false;
   }
@@ -127,7 +127,7 @@ template<class T, class Checking = checking_base<T>,
          class Exception = exception_invalid_number>
 struct checking_catch_nan: Checking
 {
-  BOOST_NUMERIC_INTERVAL_PORTABLE static bool is_nan(const T& x)
+  BOOST_GPU_ENABLED static bool is_nan(const T& x)
   {
     if (Checking::is_nan(x)) Exception()();
     return false;

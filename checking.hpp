@@ -59,7 +59,7 @@ struct checking_base
   }
   BOOST_GPU_ENABLED static T empty_lower()
   {
-    #ifndef __NVCC__
+    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
     return (std::numeric_limits<T>::has_quiet_NaN ?
             std::numeric_limits<T>::quiet_NaN() : static_cast<T>(1));
     #else
@@ -68,7 +68,7 @@ struct checking_base
   }
   BOOST_GPU_ENABLED static T empty_upper()
   {
-    #ifndef __NVCC__
+    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
     return (std::numeric_limits<T>::has_quiet_NaN ?
             std::numeric_limits<T>::quiet_NaN() : static_cast<T>(0));
     #else
@@ -92,7 +92,7 @@ struct checking_no_empty: Checking
   }
   BOOST_GPU_ENABLED static T empty_lower()
   {
-    #ifndef __NVCC__
+    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
     Exception()();
     return Checking::empty_lower();
     #else
@@ -101,7 +101,7 @@ struct checking_no_empty: Checking
   }
   BOOST_GPU_ENABLED static T empty_upper()
   {
-    #ifndef __NVCC__
+    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
     Exception()();
     return Checking::empty_upper();
     #else

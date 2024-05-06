@@ -40,40 +40,32 @@ struct checking_base
 {
   BOOST_GPU_ENABLED static T pos_inf()
   {
-    assert(std::numeric_limits<T>::has_infinity);
-    return std::numeric_limits<T>::infinity();
+    assert(BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_infinity);
+    return BOOST_GPU_EQUIV(std::numeric_limits)<T>::infinity();
   }
   BOOST_GPU_ENABLED static T neg_inf()
   {
-    assert(std::numeric_limits<T>::has_infinity);
-    return -std::numeric_limits<T>::infinity();
+    assert(BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_infinity);
+    return -BOOST_GPU_EQUIV(std::numeric_limits)<T>::infinity();
   }
   BOOST_GPU_ENABLED static T nan()
   {
-    assert(std::numeric_limits<T>::has_quiet_NaN);
-    return std::numeric_limits<T>::quiet_NaN();
+    assert(BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN);
+    return BOOST_GPU_EQUIV(std::numeric_limits)<T>::quiet_NaN();
   }
   BOOST_GPU_ENABLED static bool is_nan(const T& x)
   {
-    return std::numeric_limits<T>::has_quiet_NaN && (x != x);
+    return BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN && (x != x);
   }
   BOOST_GPU_ENABLED static T empty_lower()
   {
-    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-    return (std::numeric_limits<T>::has_quiet_NaN ?
-            std::numeric_limits<T>::quiet_NaN() : static_cast<T>(1));
-    #else
-    return checking_base_gpu<T>::empty_lower();
-    #endif
+    return (BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN ?
+            BOOST_GPU_EQUIV(std::numeric_limits)<T>::quiet_NaN() : static_cast<T>(1));
   }
   BOOST_GPU_ENABLED static T empty_upper()
   {
-    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-    return (std::numeric_limits<T>::has_quiet_NaN ?
-            std::numeric_limits<T>::quiet_NaN() : static_cast<T>(0));
-    #else
-    return checking_base_gpu<T>::empty_upper();
-    #endif
+    return (BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN ?
+            BOOST_GPU_EQUIV(std::numeric_limits)<T>::quiet_NaN() : static_cast<T>(0));
   }
   BOOST_GPU_ENABLED static bool is_empty(const T& l, const T& u)
   {

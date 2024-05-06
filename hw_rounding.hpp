@@ -36,6 +36,9 @@
 
 #if defined(__NVCC__) || defined(__CUDACC__)
 #  include <boost/numeric/interval/detail/cuda_rounding_control.hpp>
+#  define BOOST_GPU_EQUIV(EXPR) cuda::EXPR
+#else
+#  define BOOST_GPU_EQUIV(EXPR) EXPR
 #endif
 
 #if defined(BOOST_NUMERIC_INTERVAL_NO_HARDWARE) && !defined(BOOST_NO_FENV_H)

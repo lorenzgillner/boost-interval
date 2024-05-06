@@ -20,8 +20,8 @@
 
 #include <cuda.h>
 #include <math_constants.h>
-#include <cuda/std/climits>
 #include <cuda/std/cassert>
+#include <cuda/std/limits>
 #include <cuda/std/utility>
 
 namespace boost
@@ -268,6 +268,7 @@ namespace boost
       template <class T> __device__ T tanh(const T &a) {};
       template <class T> __device__ T sqrt(const T &a) {};
 
+      // XXX isn't there a more elegant way to handle this?
       template <> __device__ float min(const float &a, const float &b)
       {
         return fminf(a, b);
@@ -381,6 +382,7 @@ namespace boost
       {
         return sqrt(a);
       }
+
     } // namespace gpu
 
     // XXX this is very hacky!

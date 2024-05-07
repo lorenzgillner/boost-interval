@@ -112,11 +112,7 @@ namespace boost { namespace numeric {
     BOOST_GPU_ENABLED interval<T> hull(const T& x, const T& y);
 
     template <class T, class Policies>
-    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-    std::pair<interval<T,Policies>,interval<T,Policies> >
-    #else
-    BOOST_GPU_ENABLED cuda::std::pair<interval<T,Policies>,interval<T,Policies> >
-    #endif
+    BOOST_GPU_EQUIV(std::pair)<interval<T,Policies>,interval<T,Policies> >
         bisect(const interval<T,Policies>& x);
 
     /*

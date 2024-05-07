@@ -113,7 +113,7 @@ BOOST_GPU_ENABLED interval<T, Policies>& interval<T, Policies>::operator/=(const
 
 template<class T, class Policies> inline
 BOOST_GPU_ENABLED interval<T, Policies> operator+(const interval<T, Policies>& x,
-                                                                const interval<T, Policies>& y)
+                                                  const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y))
     return interval<T, Policies>::empty();

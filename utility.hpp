@@ -29,19 +29,19 @@ namespace numeric {
  */
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED const T& lower(const interval<T, Policies>& x)
+const T& lower(const interval<T, Policies>& x)
 {
   return x.lower();
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED const T& upper(const interval<T, Policies>& x)
+const T& upper(const interval<T, Policies>& x)
 {
   return x.upper();
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED T checked_lower(const interval<T, Policies>& x)
+T checked_lower(const interval<T, Policies>& x)
 {
   if (empty(x)) {
     typedef typename Policies::checking checking;
@@ -51,7 +51,7 @@ BOOST_GPU_ENABLED T checked_lower(const interval<T, Policies>& x)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED T checked_upper(const interval<T, Policies>& x)
+T checked_upper(const interval<T, Policies>& x)
 {
   if (empty(x)) {
     typedef typename Policies::checking checking;
@@ -61,7 +61,7 @@ BOOST_GPU_ENABLED T checked_upper(const interval<T, Policies>& x)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED T width(const interval<T, Policies>& x)
+T width(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x)) return static_cast<T>(0);
   typename Policies::rounding rnd;
@@ -69,7 +69,7 @@ BOOST_GPU_ENABLED T width(const interval<T, Policies>& x)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED T median(const interval<T, Policies>& x)
+T median(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x)) {
     typedef typename Policies::checking checking;
@@ -80,7 +80,7 @@ BOOST_GPU_ENABLED T median(const interval<T, Policies>& x)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> widen(const interval<T, Policies>& x, const T& v)
+interval<T, Policies> widen(const interval<T, Policies>& x, const T& v)
 {
   if (interval_lib::detail::test_input(x))
     return interval<T, Policies>::empty();
@@ -94,34 +94,34 @@ BOOST_GPU_ENABLED interval<T, Policies> widen(const interval<T, Policies>& x, co
  */
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED bool empty(const interval<T, Policies>& x)
+bool empty(const interval<T, Policies>& x)
 {
   return interval_lib::detail::test_input(x);
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED bool zero_in(const interval<T, Policies>& x)
+bool zero_in(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x)) return false;
   return (!interval_lib::user::is_pos(x.lower())) &&
          (!interval_lib::user::is_neg(x.upper()));
 }
 
-template<class T, class Policies> inline
-BOOST_GPU_ENABLED bool in_zero(const interval<T, Policies>& x) // DEPRECATED
+/* template<class T, class Policies> inline
+bool in_zero(const interval<T, Policies>& x) // DEPRECATED
 {
   return zero_in<T, Policies>(x);
-}
+} */
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED bool in(const T& x, const interval<T, Policies>& y)
+bool in(const T& x, const interval<T, Policies>& y)
 {
   if (interval_lib::detail::test_input(x, y)) return false;
   return y.lower() <= x && x <= y.upper();
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED bool subset(const interval<T, Policies>& x,
+bool subset(const interval<T, Policies>& x,
             const interval<T, Policies>& y)
 {
   if (empty(x)) return true;
@@ -129,7 +129,7 @@ BOOST_GPU_ENABLED bool subset(const interval<T, Policies>& x,
 }
 
 template<class T, class Policies1, class Policies2> inline
-BOOST_GPU_ENABLED bool proper_subset(const interval<T, Policies1>& x,
+bool proper_subset(const interval<T, Policies1>& x,
                    const interval<T, Policies2>& y)
 {
   if (empty(y)) return false;
@@ -139,7 +139,7 @@ BOOST_GPU_ENABLED bool proper_subset(const interval<T, Policies1>& x,
 }
 
 template<class T, class Policies1, class Policies2> inline
-BOOST_GPU_ENABLED bool overlap(const interval<T, Policies1>& x,
+bool overlap(const interval<T, Policies1>& x,
              const interval<T, Policies2>& y)
 {
   if (interval_lib::detail::test_input(x, y)) return false;
@@ -148,21 +148,21 @@ BOOST_GPU_ENABLED bool overlap(const interval<T, Policies1>& x,
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED bool singleton(const interval<T, Policies>& x)
+bool singleton(const interval<T, Policies>& x)
 {
  return !empty(x) && x.lower() == x.upper();
 }
 
 template<class T, class Policies1, class Policies2> inline
-BOOST_GPU_ENABLED bool equal(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
+bool equal(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
 {
   if (empty(x)) return empty(y);
   return !empty(y) && x.lower() == y.lower() && x.upper() == y.upper();
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> intersect(const interval<T, Policies>& x,
-                                const interval<T, Policies>& y)
+interval<T, Policies> intersect(const interval<T, Policies>& x,
+                                                  const interval<T, Policies>& y)
 {
   BOOST_USING_STD_MIN();
   BOOST_USING_STD_MAX();
@@ -175,7 +175,7 @@ BOOST_GPU_ENABLED interval<T, Policies> intersect(const interval<T, Policies>& x
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> hull(const interval<T, Policies>& x,
+interval<T, Policies> hull(const interval<T, Policies>& x,
                            const interval<T, Policies>& y)
 {
   BOOST_USING_STD_MIN();
@@ -192,7 +192,7 @@ BOOST_GPU_ENABLED interval<T, Policies> hull(const interval<T, Policies>& x,
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> hull(const interval<T, Policies>& x, const T& y)
+interval<T, Policies> hull(const interval<T, Policies>& x, const T& y)
 {
   BOOST_USING_STD_MIN();
   BOOST_USING_STD_MAX();
@@ -208,7 +208,7 @@ BOOST_GPU_ENABLED interval<T, Policies> hull(const interval<T, Policies>& x, con
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> hull(const T& x, const interval<T, Policies>& y)
+interval<T, Policies> hull(const T& x, const interval<T, Policies>& y)
 {
   BOOST_USING_STD_MIN();
   BOOST_USING_STD_MAX();
@@ -224,17 +224,13 @@ BOOST_GPU_ENABLED interval<T, Policies> hull(const T& x, const interval<T, Polic
 }
 
 template<class T> inline
-BOOST_GPU_ENABLED interval<T> hull(const T& x, const T& y)
+interval<T> hull(const T& x, const T& y)
 {
   return interval<T>::hull(x, y);
 }
 
 template<class T, class Policies> inline
-#ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-std::pair<interval<T,Policies>,interval<T,Policies> >
-#else
-BOOST_GPU_ENABLED cuda::std::pair<interval<T,Policies>,interval<T,Policies> >
-#endif
+BOOST_GPU_EQUIV(std::pair)<interval<T,Policies>,interval<T,Policies> >
 bisect(const interval<T, Policies>& x)
 {
   typedef interval<T, Policies> I;
@@ -249,7 +245,7 @@ bisect(const interval<T, Policies>& x)
  */
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED T norm(const interval<T, Policies>& x)
+T norm(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x)) {
     typedef typename Policies::checking checking;
@@ -260,7 +256,7 @@ BOOST_GPU_ENABLED T norm(const interval<T, Policies>& x)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> abs(const interval<T, Policies>& x)
+interval<T, Policies> abs(const interval<T, Policies>& x)
 {
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x))
@@ -272,7 +268,7 @@ BOOST_GPU_ENABLED interval<T, Policies> abs(const interval<T, Policies>& x)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x,
+interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x,
                                                             const interval<T, Policies>& y)
 {
   typedef interval<T, Policies> I;
@@ -283,7 +279,7 @@ BOOST_GPU_ENABLED interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (co
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x, const T& y)
+interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x, const T& y)
 {
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
@@ -293,7 +289,7 @@ BOOST_GPU_ENABLED interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (co
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const T& x, const interval<T, Policies>& y)
+interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (const T& x, const interval<T, Policies>& y)
 {
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
@@ -303,7 +299,7 @@ BOOST_GPU_ENABLED interval<T, Policies> max BOOST_PREVENT_MACRO_SUBSTITUTION (co
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x,
+interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x,
                                                             const interval<T, Policies>& y)
 {
   typedef interval<T, Policies> I;
@@ -314,7 +310,7 @@ BOOST_GPU_ENABLED interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (co
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x, const T& y)
+interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const interval<T, Policies>& x, const T& y)
 {
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))
@@ -324,7 +320,7 @@ BOOST_GPU_ENABLED interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (co
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const T& x, const interval<T, Policies>& y)
+interval<T, Policies> min BOOST_PREVENT_MACRO_SUBSTITUTION (const T& x, const interval<T, Policies>& y)
 {
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x, y))

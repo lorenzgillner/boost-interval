@@ -14,10 +14,11 @@
 #include <string>
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 
-#if !defined(__NVCC__)
-#  define BOOST_GPU_ASSERT(EXPR) EXPR
-#else
+#if defined(__CUDACC__)
+#  include <cuda/std/cassert>
 #  define BOOST_GPU_ASSERT(EXPR) assert(0)
+#else
+#  define BOOST_GPU_ASSERT(EXPR) EXPR
 #endif
 
 namespace boost {

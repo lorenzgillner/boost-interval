@@ -14,17 +14,20 @@
 #error Boost.Numeric.Interval: This header is intended for CUDA GPUs only.
 #endif
 
-#ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-#define BOOST_NUMERIC_INTERVAL_USE_GPU
-#endif
-
-#include <boost/numeric/interval/checking.hpp>
-#include <boost/numeric/interval/rounding.hpp>
-
 #include <math_constants.h>
 #include <cuda/std/cassert>
 #include <cuda/std/limits>
 #include <cuda/std/utility>
+
+#ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
+#define BOOST_NUMERIC_INTERVAL_USE_GPU
+#endif
+
+#undef BOOST_NUMERIC_INTERVAL_using_std
+#define BOOST_NUMERIC_INTERVAL_using_std(a) using cuda::std::a
+
+#include <boost/numeric/interval/checking.hpp>
+#include <boost/numeric/interval/rounding.hpp>
 
 namespace boost
 {

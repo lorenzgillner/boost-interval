@@ -40,32 +40,38 @@ struct checking_base
 {
   BOOST_GPU_ENABLED static T pos_inf()
   {
-    assert(BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_infinity);
-    return BOOST_GPU_EQUIV(std::numeric_limits)<T>::infinity();
+    BOOST_NUMERIC_INTERVAL_using_std(numeric_limits);
+    assert(numeric_limits<T>::has_infinity);
+    return numeric_limits<T>::infinity();
   }
   BOOST_GPU_ENABLED static T neg_inf()
   {
-    assert(BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_infinity);
-    return -BOOST_GPU_EQUIV(std::numeric_limits)<T>::infinity();
+    BOOST_NUMERIC_INTERVAL_using_std(numeric_limits);
+    assert(numeric_limits<T>::has_infinity);
+    return -numeric_limits<T>::infinity();
   }
   BOOST_GPU_ENABLED static T nan()
   {
-    assert(BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN);
-    return BOOST_GPU_EQUIV(std::numeric_limits)<T>::quiet_NaN();
+    BOOST_NUMERIC_INTERVAL_using_std(numeric_limits);
+    assert(numeric_limits<T>::has_quiet_NaN);
+    return numeric_limits<T>::quiet_NaN();
   }
   BOOST_GPU_ENABLED static bool is_nan(const T& x)
   {
-    return BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN && (x != x);
+    BOOST_NUMERIC_INTERVAL_using_std(numeric_limits);
+    return numeric_limits<T>::has_quiet_NaN && (x != x);
   }
   BOOST_GPU_ENABLED static T empty_lower()
   {
-    return (BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN ?
-            BOOST_GPU_EQUIV(std::numeric_limits)<T>::quiet_NaN() : static_cast<T>(1));
+    BOOST_NUMERIC_INTERVAL_using_std(numeric_limits);
+    return (numeric_limits<T>::has_quiet_NaN) ?
+            numeric_limits<T>::quiet_NaN() : static_cast<T>(1);
   }
   BOOST_GPU_ENABLED static T empty_upper()
   {
-    return (BOOST_GPU_EQUIV(std::numeric_limits)<T>::has_quiet_NaN ?
-            BOOST_GPU_EQUIV(std::numeric_limits)<T>::quiet_NaN() : static_cast<T>(0));
+    BOOST_NUMERIC_INTERVAL_using_std(numeric_limits);
+    return (numeric_limits<T>::has_quiet_NaN) ?
+            numeric_limits<T>::quiet_NaN() : static_cast<T>(0);
   }
   BOOST_GPU_ENABLED static bool is_empty(const T& l, const T& u)
   {
@@ -84,21 +90,13 @@ struct checking_no_empty: Checking
   }
   BOOST_GPU_ENABLED static T empty_lower()
   {
-    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-    Exception()();
+    BOOST_GPU_ASSERT(Exception()());
     return Checking::empty_lower();
-    #else
-    return checking_base_gpu<T>::empty_lower();
-    #endif
   }
   BOOST_GPU_ENABLED static T empty_upper()
   {
-    #ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-    Exception()();
+    BOOST_GPU_ASSERT(Exception()());
     return Checking::empty_upper();
-    #else
-    return checking_base_gpu<T>::empty_upper();
-    #endif
   }
   BOOST_GPU_ENABLED static bool is_empty(const T&, const T&)
   {

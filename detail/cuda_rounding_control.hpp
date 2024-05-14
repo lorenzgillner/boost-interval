@@ -18,6 +18,7 @@
 #define BOOST_NUMERIC_INTERVAL_USE_GPU
 #endif
 
+#include <boost/numeric/interval/checking.hpp>
 #include <boost/numeric/interval/rounding.hpp>
 
 #include <math_constants.h>
@@ -31,32 +32,32 @@ namespace boost
   {
     namespace gpu
     {
-      template <class T> __device__ T min(const T &a, const T &b) {};
-      template <class T> __device__ T max(const T &a, const T &b) {};
-      template <class T> __device__ T floor(const T &a) {};
-      template <class T> __device__ T ceil(const T &a) {};
-      template <class T> __device__ T exp(const T &a) {};
-      template <class T> __device__ T log(const T &a) {};
-      template <class T> __device__ T sin(const T &a) {};
-      template <class T> __device__ T cos(const T &a) {};
-      template <class T> __device__ T tan(const T &a) {};
-      template <class T> __device__ T asin(const T &a) {};
-      template <class T> __device__ T acos(const T &a) {};
-      template <class T> __device__ T atan(const T &a) {};
-      template <class T> __device__ T sinh(const T &a) {};
-      template <class T> __device__ T cosh(const T &a) {};
-      template <class T> __device__ T tanh(const T &a) {};
-      template <class T> __device__ T asinh(const T &a) {};
-      template <class T> __device__ T acosh(const T &a) {};
-      template <class T> __device__ T atanh(const T &a) {};
-      template <class T> __device__ T sqrt(const T &a) {};
+      template <class T> __device__ T min(const T &a, const T &b);
+      template <class T> __device__ T max(const T &a, const T &b);
+      template <class T> __device__ T floor(const T &a);
+      template <class T> __device__ T ceil(const T &a);
+      template <class T> __device__ T sqrt(const T &a);
+      template <class T> __device__ T exp(const T &a);
+      template <class T> __device__ T log(const T &a);
+      template <class T> __device__ T sin(const T &a);
+      template <class T> __device__ T cos(const T &a);
+      template <class T> __device__ T tan(const T &a);
+      template <class T> __device__ T asin(const T &a);
+      template <class T> __device__ T acos(const T &a);
+      template <class T> __device__ T atan(const T &a);
+      template <class T> __device__ T sinh(const T &a);
+      template <class T> __device__ T cosh(const T &a);
+      template <class T> __device__ T tanh(const T &a);
+      template <class T> __device__ T asinh(const T &a);
+      template <class T> __device__ T acosh(const T &a);
+      template <class T> __device__ T atanh(const T &a);
 
-      // XXX isn't there a more elegant way to handle this?
       template <> __device__ float min(const float &a, const float &b) { return fminf(a, b); }
       template <> __device__ float max(const float &a, const float &b) { return fmaxf(a, b); }
       #define BOOST_GPU_SPECIALIZATION(g) template <> __device__ float g(const float &a) { return g##f(a); }
       BOOST_GPU_SPECIALIZATION(floor)
       BOOST_GPU_SPECIALIZATION(ceil)
+      BOOST_GPU_SPECIALIZATION(sqrt)
       BOOST_GPU_SPECIALIZATION(sin)
       BOOST_GPU_SPECIALIZATION(cos)
       BOOST_GPU_SPECIALIZATION(tan)
@@ -69,7 +70,6 @@ namespace boost
       BOOST_GPU_SPECIALIZATION(asinh)
       BOOST_GPU_SPECIALIZATION(acosh)
       BOOST_GPU_SPECIALIZATION(atanh)
-      BOOST_GPU_SPECIALIZATION(sqrt)
       #undef BOOST_GPU_SPECIALIZATION
 
       template <> __device__ double min(const double &a, const double &b) { return fmin(a, b); }
@@ -77,12 +77,15 @@ namespace boost
       /* sin, cos, tan, etc. have already been defined in CUDA */
 
     } // namespace gpu
+
     namespace interval_lib
     {
-      /** Checking */
+      /**
+       * Checking
+       */
 
       template<class T>
-      struct checking_base_gpu
+      struct checking_base_gpu: checking_base<T>
       {};
 
       template<>
@@ -109,39 +112,9 @@ namespace boost
         static __device__ bool is_empty(const double& l, const double& u) { return !(l <= u); }
       };
 
-      /** Rounding control */
-
-      // namespace detail
-      // {
-      //   // arithmetic functions in CUDA are stateless, so this shouldn't do anything
-      //   template <class T>
-      //   struct cuda_rounding_control
-      //   {
-      //     typedef unsigned int rounding_mode;
-      //     __device__ void set_rounding_mode(rounding_mode &) {}
-      //     __device__ void get_rounding_mode(rounding_mode) {}
-      //     __device__ void downward() {}
-      //     __device__ void upward() {}
-      //     __device__ void to_nearest() {}
-      //     __device__ void toward_zero() {}
-      //     __device__ T force_rounding(const T& r) { return r; }
-      //   };
-
-      // } // namespace detail
-
-      // template <class T>
-      // struct rounding_control_gpu
-      // {
-      //   typedef unsigned int rounding_mode;
-      //   __device__ void set_rounding_mode(rounding_mode &) {}
-      //   __device__ void get_rounding_mode(rounding_mode) {}
-      //   __device__ void downward() {}
-      //   __device__ void upward() {}
-      //   __device__ void to_nearest() {}
-      //   __device__ void toward_zero() {}
-      //   __device__ const T& to_int(const T& x)         { return x; }
-      //   __device__ const T& force_rounding(const T& r) { return r; }
-      // };
+      /**
+       * Rounding control
+       */
 
       template <class T>
       struct rounding_control_gpu: rounding_control<T>
@@ -159,7 +132,9 @@ namespace boost
         __device__ double to_int(const double& x) { return nearbyint(x); }
       };
 
-      /** Rounded arithmetic functions */
+      /**
+       * Rounded arithmetic
+       */
 
       template <class T, class Rounding = rounding_control_gpu<T> >
       struct rounded_arith_gpu : Rounding
@@ -207,8 +182,8 @@ namespace boost
         __device__ float sqrt_up(const float &x) { return __fsqrt_ru(x); }
         __device__ float int_down(const float &x) { return floorf(x); }
         __device__ float int_up(const float &x) { return ceilf(x); }
-        __device__ float next_down(const float &x) { return nextafterf(x, -CUDART_INF_F); } // TODO replace with neg_inf()
-        __device__ float next_up(const float &x) { return nextafterf(x, CUDART_INF_F); } // TODO replace with pos_inf()
+        __device__ float next_down(const float &x) { return nextafterf(x, checking_base_gpu<float>::neg_inf()); }
+        __device__ float next_up(const float &x) { return nextafterf(x, checking_base_gpu<float>::pos_inf()); }
       };
 
       template <class Rounding>
@@ -232,35 +207,34 @@ namespace boost
         __device__ double sqrt_up(const double &x) { return __dsqrt_ru(x); }
         __device__ double int_down(const double &x) { return floor(x); }
         __device__ double int_up(const double &x) { return ceil(x); }
-        __device__ double next_down(const double &x) { return nextafter(x, -CUDART_INF); } // TODO replace with neg_inf()
-        __device__ double next_up(const double &x) { return nextafter(x, CUDART_INF); } // TODO replace with pos_inf()
+        __device__ double next_down(const double &x) { return nextafter(x, checking_base_gpu<double>::neg_inf()); }
+        __device__ double next_up(const double &x) { return nextafter(x, checking_base_gpu<double>::pos_inf()); }
       };
 
-      /** Rounded transcendental functions */
+      /**
+       * Rounded transcendental functions
+       */
 
       template <class T, class Rounding>
       struct rounded_transc_gpu: Rounding
       {
-        /* # define BOOST_NUMERIC_INTERVAL_new_func(f) \
+        # define BOOST_NUMERIC_INTERVAL_new_func(f) \
           __device__ T f##_down(const T& x) { BOOST_NUMERIC_INTERVAL_using_math(f); return next_down(f(x)); } \
-          __device__ T f##_up  (const T& x) { BOOST_NUMERIC_INTERVAL_using_math(f); return next_up(f(x)); } */
-          # define BOOST_NUMERIC_INTERVAL_new_func(f) \
-          __device__ T f##_down(const T& x) { return next_down(boost::numeric::gpu::f(x)); } \
-          __device__ T f##_up  (const T& x) { return next_up(boost::numeric::gpu::f(x)); }
-        BOOST_NUMERIC_INTERVAL_new_func(exp)
-        BOOST_NUMERIC_INTERVAL_new_func(log)
-        BOOST_NUMERIC_INTERVAL_new_func(sin)
-        BOOST_NUMERIC_INTERVAL_new_func(cos)
-        BOOST_NUMERIC_INTERVAL_new_func(tan)
-        BOOST_NUMERIC_INTERVAL_new_func(asin)
-        BOOST_NUMERIC_INTERVAL_new_func(acos)
-        BOOST_NUMERIC_INTERVAL_new_func(atan)
-        BOOST_NUMERIC_INTERVAL_new_func(sinh)
-        BOOST_NUMERIC_INTERVAL_new_func(cosh)
-        BOOST_NUMERIC_INTERVAL_new_func(tanh)
-        BOOST_NUMERIC_INTERVAL_new_func(asinh)
-        BOOST_NUMERIC_INTERVAL_new_func(acosh)
-        BOOST_NUMERIC_INTERVAL_new_func(atanh)
+          __device__ T f##_up  (const T& x) { BOOST_NUMERIC_INTERVAL_using_math(f); return next_up(f(x)); }
+        BOOST_NUMERIC_INTERVAL_new_func(exp)   // 1 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(log)   // 1 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(sin)   // 2 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(cos)   // 2 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(tan)   // 2 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(asin)  // 2 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(acos)  // 2 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(atan)  // 2 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(sinh)  // 2 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(cosh)  // 1 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(tanh)  // 1 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(asinh) // 3 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(acosh) // 3 ulp
+        BOOST_NUMERIC_INTERVAL_new_func(atanh) // 2 ulp
         #undef BOOST_NUMERIC_INTERVAL_new_func
       };
 
@@ -286,19 +260,20 @@ namespace boost
       };
     } // namespace interval_lib
 
+    /**
+     * DANGER ZONE
+     */
+
     #if defined(__CUDA_ARCH__)
     #  undef BOOST_USING_STD_MIN
     #  define BOOST_USING_STD_MIN() using gpu::min
+    
     #  undef BOOST_USING_STD_MAX
     #  define BOOST_USING_STD_MAX() using gpu::max
-    #endif
-    // #undef BOOST_USING_STD_MIN
-    // #define BOOST_USING_STD_MIN() using cuda::std::min;
-    // #undef BOOST_USING_STD_MAX
-    // #define BOOST_USING_STD_MAX() using cuda::std::max;
 
-    #undef BOOST_NUMERIC_INTERVAL_using_math
-    #define BOOST_NUMERIC_INTERVAL_using_math(a) using gpu::a
+    #  undef BOOST_NUMERIC_INTERVAL_using_math
+    #  define BOOST_NUMERIC_INTERVAL_using_math(a) using gpu::a
+    #endif
 
   } // namespace numeric
 } // namespace boost

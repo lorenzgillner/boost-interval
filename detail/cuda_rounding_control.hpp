@@ -10,7 +10,7 @@
 #ifndef BOOST_NUMERIC_INTERVAL_DETAIL_CUDA_ROUNDING_CONTROL_HPP
 #define BOOST_NUMERIC_INTERVAL_DETAIL_CUDA_ROUNDING_CONTROL_HPP
 
-#if !defined(__NVCC__) && !defined(__CUDACC__)
+#if !defined(__CUDACC__) && !defined(__NVCC__)
 #error Boost.Numeric.Interval: This header is intended for CUDA GPUs only.
 #endif
 
@@ -18,13 +18,6 @@
 #include <cuda/std/cassert>
 #include <cuda/std/limits>
 #include <cuda/std/utility>
-
-#ifndef BOOST_NUMERIC_INTERVAL_USE_GPU
-#define BOOST_NUMERIC_INTERVAL_USE_GPU
-#endif
-
-#undef BOOST_NUMERIC_INTERVAL_using_std
-#define BOOST_NUMERIC_INTERVAL_using_std(a) using cuda::std::a
 
 #include <boost/numeric/interval/checking.hpp>
 #include <boost/numeric/interval/rounding.hpp>
@@ -35,25 +28,26 @@ namespace boost
   {
     namespace gpu
     {
-      template <class T> __device__ T min(const T &a, const T &b);
-      template <class T> __device__ T max(const T &a, const T &b);
-      template <class T> __device__ T floor(const T &a);
-      template <class T> __device__ T ceil(const T &a);
-      template <class T> __device__ T sqrt(const T &a);
-      template <class T> __device__ T exp(const T &a);
-      template <class T> __device__ T log(const T &a);
-      template <class T> __device__ T sin(const T &a);
-      template <class T> __device__ T cos(const T &a);
-      template <class T> __device__ T tan(const T &a);
-      template <class T> __device__ T asin(const T &a);
-      template <class T> __device__ T acos(const T &a);
-      template <class T> __device__ T atan(const T &a);
-      template <class T> __device__ T sinh(const T &a);
-      template <class T> __device__ T cosh(const T &a);
-      template <class T> __device__ T tanh(const T &a);
-      template <class T> __device__ T asinh(const T &a);
-      template <class T> __device__ T acosh(const T &a);
-      template <class T> __device__ T atanh(const T &a);
+      /** templates */
+      template <class T> __device__ T min(const T &x, const T &y);
+      template <class T> __device__ T max(const T &x, const T &y);
+      template <class T> __device__ T floor(const T &x);
+      template <class T> __device__ T ceil(const T &x);
+      template <class T> __device__ T sqrt(const T &x);
+      template <class T> __device__ T exp(const T &x);
+      template <class T> __device__ T log(const T &x);
+      template <class T> __device__ T sin(const T &x);
+      template <class T> __device__ T cos(const T &x);
+      template <class T> __device__ T tan(const T &x);
+      template <class T> __device__ T asin(const T &x);
+      template <class T> __device__ T acos(const T &x);
+      template <class T> __device__ T atan(const T &x);
+      template <class T> __device__ T sinh(const T &x);
+      template <class T> __device__ T cosh(const T &x);
+      template <class T> __device__ T tanh(const T &x);
+      template <class T> __device__ T asinh(const T &x);
+      template <class T> __device__ T acosh(const T &x);
+      template <class T> __device__ T atanh(const T &x);
 
       template <> __device__ float min(const float &a, const float &b) { return fminf(a, b); }
       template <> __device__ float max(const float &a, const float &b) { return fmaxf(a, b); }
@@ -252,9 +246,6 @@ namespace boost
       template <>
       struct rounded_math_gpu<double>: save_state_nothing<rounded_arith_gpu<double> >
       {};
-      
-      template<class T, class Rounding = rounded_arith_gpu<T> > 
-      struct rounded_transc_gpu;
 
       template<class T>
       struct default_policies_gpu

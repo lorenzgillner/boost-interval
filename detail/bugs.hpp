@@ -46,11 +46,11 @@
 #endif
 
 #if defined(__CUDA_ARCH__)
-#  define BOOST_NUMERIC_INTERVAL_using_std(a) using cuda::std::a
-#  define BOOST_GPU_EQUIV(EXPR) cuda::EXPR // TODO this
+#  define BOOST_NUMERIC_INTERVAL_std(a) cuda::std::a
 #else
-#  define BOOST_NUMERIC_INTERVAL_using_std(a) using std::a
-#  define BOOST_GPU_EQUIV(EXPR) EXPR
+#  define BOOST_NUMERIC_INTERVAL_std(a) std::a
 #endif
+
+#define BOOST_NUMERIC_INTERVAL_using_std(a) using BOOST_NUMERIC_INTERVAL_std(a)
 
 #endif // BOOST_NUMERIC_INTERVAL_DETAIL_BUGS

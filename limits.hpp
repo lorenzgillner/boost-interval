@@ -16,8 +16,6 @@
 #include <boost/limits.hpp>
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 
-#define BOOST_NUMERIC_INTERVAL_using_std(a) using std::a
-
 namespace std {
 
 template<class T, class Policies>

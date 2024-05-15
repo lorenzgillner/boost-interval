@@ -45,4 +45,12 @@
 #  define BOOST_NUMERIC_INTERVAL_using_ahyp(a)
 #endif
 
+#if defined(__CUDA_ARCH__)
+#  define BOOST_NUMERIC_INTERVAL_using_std(a) using cuda::std::a
+#  define BOOST_GPU_EQUIV(EXPR) cuda::EXPR // TODO this
+#else
+#  define BOOST_NUMERIC_INTERVAL_using_std(a) using std::a
+#  define BOOST_GPU_EQUIV(EXPR) EXPR
+#endif
+
 #endif // BOOST_NUMERIC_INTERVAL_DETAIL_BUGS

@@ -14,6 +14,7 @@
 #include <string>
 #include <cassert>
 #include <boost/limits.hpp>
+#include <boost/numeric/interval/detail/bugs.hpp>
 
 namespace boost {
 namespace numeric {
@@ -23,7 +24,7 @@ struct exception_create_empty
 {
   void operator()()
   {
-    throw std::runtime_error("boost::interval: empty interval created");
+    BOOST_NUMERIC_INTERVAL_throw("boost::interval: empty interval created");
   }
 };
 
@@ -31,7 +32,7 @@ struct exception_invalid_number
 {
   void operator()()
   {
-    throw std::invalid_argument("boost::interval: invalid number");
+    BOOST_NUMERIC_INTERVAL_throw("boost::interval: invalid number");
   }
 };
 
@@ -85,17 +86,17 @@ struct checking_no_empty: Checking
 {
   BOOST_GPU_ENABLED static T nan()
   {
-    assert(false);
+    assert(false); // ?
     return Checking::nan();
   }
   BOOST_GPU_ENABLED static T empty_lower()
   {
-    BOOST_GPU_ASSERT(Exception()());
+    Exception()();
     return Checking::empty_lower();
   }
   BOOST_GPU_ENABLED static T empty_upper()
   {
-    BOOST_GPU_ASSERT(Exception()());
+    Exception()();
     return Checking::empty_upper();
   }
   BOOST_GPU_ENABLED static bool is_empty(const T&, const T&)

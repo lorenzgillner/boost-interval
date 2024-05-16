@@ -47,6 +47,10 @@
 
 #if defined(__CUDA_ARCH__)
 #  define BOOST_NUMERIC_INTERVAL_std(a) cuda::std::a
+#  undef BOOST_USING_STD_MIN
+#  define BOOST_USING_STD_MIN() using boost::numeric::gpu::min
+#  undef BOOST_USING_STD_MAX
+#  define BOOST_USING_STD_MAX() using boost::numeric::gpu::max
 #else
 #  define BOOST_NUMERIC_INTERVAL_std(a) std::a
 #endif

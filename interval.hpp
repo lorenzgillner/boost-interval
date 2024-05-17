@@ -21,7 +21,7 @@ namespace interval_lib {
 
 struct comparison_error
 {
-  void operator()()
+  BOOST_GPU_ENABLED void operator()()
   {
     BOOST_NUMERIC_INTERVAL_throw("boost::interval: uncertain comparison");
   }
@@ -334,6 +334,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator< (const interval_holder& 
     else if (low >= r.up) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -344,6 +345,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator> (const interval_holder& 
     else if (up <= r.low) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -354,6 +356,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator<= (const interval_holder&
     else if (low > r.up) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -364,6 +367,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator>= (const interval_holder&
     else if (up < r.low) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -374,6 +378,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator== (const interval_holder&
     else if (up < r.low || low > r.up) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -384,6 +389,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator!= (const interval_holder&
     else if (up == r.low && low == r.up) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 /*
@@ -398,6 +404,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator< (const number_holder& r)
     else if (low >= r.val) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -408,6 +415,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator> (const number_holder& r)
     else if (up <= r.val) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -418,6 +426,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator<= (const number_holder& r
     else if (low > r.val) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -428,6 +437,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator>= (const number_holder& r
     else if (up < r.val) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -438,6 +448,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator== (const number_holder& r
     else if (up < r.val || low > r.val) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 template<class T, class Policies> inline
@@ -448,6 +459,7 @@ BOOST_GPU_ENABLED bool interval<T, Policies>::operator!= (const number_holder& r
     else if (up == r.val && low == r.val) return false;
   }
   interval_lib::comparison_error()();
+  return false; // never reached
 }
 
 } // namespace numeric

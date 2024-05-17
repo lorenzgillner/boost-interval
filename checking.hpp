@@ -22,7 +22,7 @@ namespace interval_lib {
 
 struct exception_create_empty
 {
-  void operator()()
+  BOOST_GPU_ENABLED void operator()()
   {
     BOOST_NUMERIC_INTERVAL_throw("boost::interval: empty interval created");
   }
@@ -30,7 +30,7 @@ struct exception_create_empty
 
 struct exception_invalid_number
 {
-  void operator()()
+  BOOST_GPU_ENABLED void operator()()
   {
     BOOST_NUMERIC_INTERVAL_throw("boost::interval: invalid number");
   }

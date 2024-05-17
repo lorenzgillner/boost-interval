@@ -120,7 +120,9 @@ struct checking_catch_nan: Checking
 {
   BOOST_GPU_ENABLED static bool is_nan(const T& x)
   {
-    if (Checking::is_nan(x)) Exception()();
+    if (Checking::is_nan(x)) {
+      Exception()();
+    }
     return false;
   }
 };

@@ -59,4 +59,8 @@
 
 #define BOOST_NUMERIC_INTERVAL_using_std(a) using BOOST_NUMERIC_INTERVAL_std(a)
 
+#if defined(__CUDACC__)
+#  define BOOST_GPU_DISABLED __host__
+#endif
+
 #endif // BOOST_NUMERIC_INTERVAL_DETAIL_BUGS

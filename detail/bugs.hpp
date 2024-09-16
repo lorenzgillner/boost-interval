@@ -61,6 +61,8 @@
 
 #if defined(__CUDACC__)
 #  define BOOST_GPU_DISABLED __host__
+#else
+#  define BOOST_GPU_DISABLED
 #endif
 
 #endif // BOOST_NUMERIC_INTERVAL_DETAIL_BUGS

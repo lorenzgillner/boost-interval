@@ -230,14 +230,14 @@ BOOST_GPU_ENABLED interval<T> hull(const T& x, const T& y)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_DISABLED std::pair<interval<T,Policies>,interval<T,Policies> >
+BOOST_GPU_ENABLED BOOST_NUMERIC_INTERVAL_std::pair<interval<T,Policies>,interval<T,Policies> >
 bisect(const interval<T, Policies>& x)
 {
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x))
-    return std::pair<I,I>(I::empty(), I::empty());
+    return BOOST_NUMERIC_INTERVAL_std::pair<I,I>(I::empty(), I::empty());
   const T m = median(x);
-  return std::pair<I,I>(I(x.lower(), m, true), I(m, x.upper(), true));
+  return BOOST_NUMERIC_INTERVAL_std::pair<I,I>(I(x.lower(), m, true), I(m, x.upper(), true));
 }
 
 /*

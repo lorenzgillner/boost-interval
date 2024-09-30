@@ -57,7 +57,7 @@
 #  define BOOST_NUMERIC_INTERVAL_throw(exception) throw std::runtime_error(exception)
 #endif
 
-#define BOOST_NUMERIC_INTERVAL_using_std(a) using BOOST_NUMERIC_INTERVAL_std(a)
+#define BOOST_NUMERIC_INTERVAL_using_std(a) using BOOST_NUMERIC_INTERVAL_std::a
 
 #if defined(__CUDACC__)
 #  define BOOST_GPU_DISABLED __host__

@@ -64,6 +64,9 @@ namespace detail {
   template <class T> __device__ T succ(const T &x);
   template <class T> __device__ T mid(const T &x, const T &y);
 
+  template <class T, class U> __device__ T conv_rd(const U &x);
+  template <class T, class U> __device__ T conv_ru(const U &x);
+
   /** float specialization */
   #define BOOST_NUMERIC_INTERVAL_gpu_spec(a) \
     template <> inline __device__ float a##_rd(const float &x, const float &y) \
@@ -85,6 +88,18 @@ namespace detail {
   { return nextafterf(x, CUDART_INF_F); }
   template <> inline __device__ float mid(const float &x, const float &y)
   { return __fdiv_rn(__fadd_rn(x, y), 2); }
+  template <> inline __device__ float conv_rd(const int &x)
+  { return __int2float_rd(x); }
+  template <> inline __device__ float conv_ru(const int &x)
+  { return __int2float_ru(x); }
+  template <> inline __device__ float conv_rd(const long long int &x)
+  { return __ll2float_rd(x); }
+  template <> inline __device__ float conv_ru(const long long int &x)
+  { return __ll2float_ru(x); }
+  template <> inline __device__ float conv_rd(const double &x)
+  { return __double2float_rd(x); }
+  template <> inline __device__ float conv_ru(const double &x)
+  { return __double2float_ru(x); }
 
   /** double specialization */
   #define BOOST_NUMERIC_INTERVAL_gpu_spec(a) \
@@ -107,6 +122,18 @@ namespace detail {
   { return nextafter(x, CUDART_INF); }
   template <> inline __device__ double mid(const double &x, const double &y)
   { return __ddiv_rn(__dadd_rn(x, y), 2); }
+  template <> inline __device__ double conv_rd(const int &x)
+  { return double(x); } // XXX
+  template <> inline __device__ double conv_ru(const int &x)
+  { return double(x); } // XXX
+  template <> inline __device__ double conv_rd(const long long int &x)
+  { return __ll2double_rd(x); }
+  template <> inline __device__ double conv_ru(const long long int &x)
+  { return __ll2double_ru(x); }
+  template <> inline __device__ double conv_rd(const float &x)
+  { return double(x); } // XXX
+  template <> inline __device__ double conv_ru(const float &x)
+  { return double(x); } // XXX
 
 } // namespace detail
 
@@ -149,8 +176,8 @@ template <class T, class Rounding>
 struct rounded_arith_gpu : Rounding
 {
   __device__ void init() {}
-  template <class U> __device__ T conv_down(U const &v) { return v; } // TODO use typecast intrinsics
-  template <class U> __device__ T conv_up(U const &v) { return v; }
+  template <class U> __device__ T conv_down(U const &v) { return detail::conv_rd(v); }
+  template <class U> __device__ T conv_up(U const &v) { return detail::conv_ru(v); }
   #define BOOST_NUMERIC_INTERVAL_new_func(a) \
     __device__ T a##_down(const T &x, const T &y) \
     { return detail::a##_rd(x, y); } \

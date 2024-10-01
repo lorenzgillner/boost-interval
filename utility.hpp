@@ -13,7 +13,6 @@
 
 #include <boost/numeric/interval/utility_fwd.hpp>
 #include <boost/numeric/interval/detail/test_input.hpp>
-#include <boost/numeric/interval/detail/bugs.hpp>
 #include <algorithm>
 #include <utility>
 
@@ -233,11 +232,12 @@ template<class T, class Policies> inline
 BOOST_GPU_ENABLED BOOST_NUMERIC_INTERVAL_std::pair<interval<T,Policies>,interval<T,Policies> >
 bisect(const interval<T, Policies>& x)
 {
+  BOOST_NUMERIC_INTERVAL_using_std(pair);
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x))
-    return BOOST_NUMERIC_INTERVAL_std::pair<I,I>(I::empty(), I::empty());
+    return pair<I,I>(I::empty(), I::empty());
   const T m = median(x);
-  return BOOST_NUMERIC_INTERVAL_std::pair<I,I>(I(x.lower(), m, true), I(m, x.upper(), true));
+  return pair<I,I>(I(x.lower(), m, true), I(m, x.upper(), true));
 }
 
 /*

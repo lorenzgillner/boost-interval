@@ -14,7 +14,9 @@
 #error Boost.Numeric.Interval: This header is intended for CUDA GPUs only.
 #endif
 
+#include <cuda.h>
 #include <math_constants.h>
+
 #include <cuda/std/cassert>
 #include <cuda/std/cmath>
 #include <cuda/std/climits>

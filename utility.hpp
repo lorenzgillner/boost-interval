@@ -229,7 +229,7 @@ BOOST_GPU_ENABLED interval<T> hull(const T& x, const T& y)
 }
 
 template<class T, class Policies> inline
-BOOST_GPU_ENABLED BOOST_NUMERIC_INTERVAL_std::pair<interval<T,Policies>,interval<T,Policies> >
+BOOST_GPU_ENABLED BOOST_NUMERIC_INTERVAL_std(pair)<interval<T,Policies>,interval<T,Policies> >
 bisect(const interval<T, Policies>& x)
 {
   BOOST_NUMERIC_INTERVAL_using_std(pair);

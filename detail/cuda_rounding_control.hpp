@@ -66,6 +66,9 @@ namespace detail {
   template <class T> __device__ T succ(const T &x);
   template <class T> __device__ T mid(const T &x, const T &y);
 
+  template <class T, class U> __device__ T conv_rd(U const &v);
+  template <class T, class U> __device__ T conv_ru(U const &v);
+
   /** float specialization */
   #define BOOST_NUMERIC_INTERVAL_gpu_spec(a) \
     template <> inline __device__ float a##_rd(const float &x, const float &y) \
@@ -87,6 +90,18 @@ namespace detail {
   { return nextafterf(x, CUDART_INF_F); }
   template <> inline __device__ float mid(const float &x, const float &y)
   { return __fdiv_rn(__fadd_rn(x, y), 2); }
+  template <> inline __device__ float conv_rd(const int &v)
+  { return __int2float_rd(v); }
+  template <> inline __device__ float conv_ru(const int &v)
+  { return __int2float_ru(v); }
+  template <> inline __device__ float conv_rd(const long long int &v)
+  { return __ll2float_rd(v); }
+  template <> inline __device__ float conv_ru(const long long int &v)
+  { return __ll2float_ru(v); }
+  template <> inline __device__ float conv_rd(const double &v)
+  { return __double2float_rd(v); }
+  template <> inline __device__ float conv_ru(const double &v)
+  { return __double2float_ru(v); }
 
   /** double specialization */
   #define BOOST_NUMERIC_INTERVAL_gpu_spec(a) \
@@ -109,11 +124,15 @@ namespace detail {
   { return nextafter(x, CUDART_INF); }
   template <> inline __device__ double mid(const double &x, const double &y)
   { return __ddiv_rn(__dadd_rn(x, y), 2); }
+  template <> inline __device__ double conv_rd(const long long int &v)
+  { return __ll2double_rd(v); }
+  template <> inline __device__ double conv_ru(const long long int &v)
+  { return __ll2double_ru(v); }
 
 } // namespace detail
 
 /**
- * Checking
+ * Checking should be compatible with the GPU "as is", so no further spezializations are needed
  */
 
 template<class T>
@@ -144,15 +163,15 @@ struct rounding_control_gpu<double>
  * Directly rounded arithmetic
  */
 
-template<class T, class Rounding = rounding_control_gpu<T> >
-struct rounded_arith_gpu;
+template<class T, class Rounding = rounding_control<T> >
+struct rounded_arith_direct;
 
 template <class T, class Rounding>
-struct rounded_arith_gpu : Rounding
+struct rounded_arith_direct : Rounding
 {
   __device__ void init() {}
-  template <class U> __device__ T conv_down(U const &v) { return v; } // TODO figure out how to use intrinsic casts here
-  template <class U> __device__ T conv_up(U const &v) { return v; }
+  template <class U> __device__ T conv_down(U const &v) { return detail::conv_rd(v); }
+  template <class U> __device__ T conv_up(U const &v) { return detail::conv_ru(v); }
   #define BOOST_NUMERIC_INTERVAL_new_func(a) \
     __device__ T a##_down(const T &x, const T &y) \
     { return detail::a##_rd(x, y); } \
@@ -176,11 +195,11 @@ struct rounded_arith_gpu : Rounding
  * Rounded transcendental functions
  */
 
-template<class T, class Rounding = rounded_arith_gpu<T> > 
-struct rounded_transc_gpu;
+template<class T, class Rounding = rounded_arith_direct<T> > 
+struct rounded_transc_direct;
 
 template <class T, class Rounding>
-struct rounded_transc_gpu: Rounding
+struct rounded_transc_direct: Rounding
 {
   #define BOOST_NUMERIC_INTERVAL_new_func(a) \
     __device__ T a##_down(const T& x) { BOOST_NUMERIC_INTERVAL_using_math(a); return next_down(a(x)); } \
@@ -202,6 +221,19 @@ struct rounded_transc_gpu: Rounding
   #undef BOOST_NUMERIC_INTERVAL_new_func
 };
 
+/** 
+ * Convenience wrappers for GPU use
+ */
+
+template <class T>
+struct rounded_arith_gpu: rounded_arith_direct<T>
+{};
+
+template <class T>
+struct rounded_transc_gpu: rounded_transc_direct<T>
+{};
+
+/* fall back to exact mode if no specialization is available */
 template <class T>
 struct rounded_math_gpu: save_state_nothing<rounded_arith_exact<T> >
 {};

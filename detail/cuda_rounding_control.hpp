@@ -202,8 +202,10 @@ template <class T, class Rounding>
 struct rounded_transc_direct: Rounding
 {
   #define BOOST_NUMERIC_INTERVAL_new_func(a) \
-    __device__ T a##_down(const T& x) { BOOST_NUMERIC_INTERVAL_using_math(a); return next_down(a(x)); } \
-    __device__ T a##_up  (const T& x) { BOOST_NUMERIC_INTERVAL_using_math(a); return next_up(a(x)); }
+    __device__ T a##_down(const T& x) \
+    { BOOST_NUMERIC_INTERVAL_using_math(a); T ax = a(x); return (ax > T(-1) && ax != T(0)) ? next_down(ax) : ax; } \
+    __device__ T a##_up  (const T& x) \
+    { BOOST_NUMERIC_INTERVAL_using_math(a); T ax = a(x); return (ax < T(1) && ax != T(0)) ? next_up(ax) : ax; }
   BOOST_NUMERIC_INTERVAL_new_func(exp)   // 1 ulp (double)
   BOOST_NUMERIC_INTERVAL_new_func(log)   // 1 ulp (double)
   BOOST_NUMERIC_INTERVAL_new_func(sin)   // 2 ulp (double)

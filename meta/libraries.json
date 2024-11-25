@@ -4,7 +4,8 @@
     "authors": [
         "Guillaume Melquiond",
         "Hervé Brönnimann",
-        "Sylvain Pion"
+        "Sylvain Pion",
+        "Lorenz Gillner"
     ],
     "description": "Extends the usual arithmetic functions to mathematical intervals.",
     "documentation": "doc/interval.htm",
